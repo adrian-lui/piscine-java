@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Character {
+public abstract class Character {
 
     private static List<Character> allCharacters = new ArrayList<>();
     final protected int maxHealth;
@@ -64,29 +64,21 @@ public class Character {
         }
     }
 
-    public void takeDamage(int damage) {
-        if (damage > currentHealth) {
-            currentHealth = 0;
-        } else {
-            currentHealth -= damage;
-        }
-    }
+    public abstract void takeDamage(int damage);
 
-    public void attack(Character character) {
-        character.takeDamage(9);
-    }
+    public abstract void attack(Character character);
 
     public static void main(String[] args) {
-        System.out.println(Character.printStatus());
+        Templar alistair = new Templar("Alistair", 18, 2, 4);
+        Sorcerer morrigan = new Sorcerer("Morrigan", 21, 5);
+        Monster dragon = new Monster("Dragon", 12);
 
-        Character aragorn = new Character("Aragorn", 20);
-        Character uruk = new Character("Uruk", 15);
+        dragon.attack(alistair);
+        dragon.attack(morrigan);
 
-        System.out.println(Character.printStatus());
+        alistair.attack(dragon);
+        morrigan.attack(dragon);
 
-        Character winner = Character.fight(aragorn, uruk);
-
-        System.out.println(winner.toString());
         System.out.println(Character.printStatus());
     }
 }

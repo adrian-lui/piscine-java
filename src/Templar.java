@@ -33,14 +33,17 @@ public class Templar extends Character implements Healer, Tank {
         }
     }
 
-    public static void main(String[] args) {
-        Templar alistair = new Templar("Alistair", 20, 5, 4);
-        Templar roderick = new Templar("Roderick", 10, 3, 2);
+    @Override
+    public void attack(Character character) {
+        heal(this);
+        character.takeDamage(6);
+    }
 
-        Character.fight(alistair, roderick);
-
-        alistair.heal(alistair);
-
-        System.out.println(Character.printStatus());
+    @Override
+    public void takeDamage(int damage) {
+        damage = damage - shield;
+        if (damage > 0) {
+            currentHealth -= damage;
+        }
     }
 }
