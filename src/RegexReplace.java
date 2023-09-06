@@ -20,14 +20,29 @@ public class RegexReplace {
             return null;
         }
         List<String> list = new ArrayList<>(Arrays.stream(s.split("@")).toList());
-        String username = list.get(0).replaceAll("(\\.|-|_)", "_");
+        String username = list.get(0);
         String hidden = "";
-        if (username.contains("_")) {
-            hidden += username.substring(0, username.indexOf("_")-1);
-            hidden += "*".repeat(username.length() - username.indexOf("_") + 1);
+        if (username.contains("_") || username.contains(".") || username.contains("-")) {
+            if (username.contains("_")) {
+                hidden += username.substring(0, username.indexOf("_")+1);
+            }
+            if (username.contains("-")) {
+                hidden += username.substring(0, username.indexOf("-")+1);
+            }
+            if (username.contains(".")) {
+                hidden += username.substring(0, username.indexOf(".")+1);
+            }
+            hidden += "*".repeat(username.length() - hidden.length());
         } else if (username.length() > 3) {
+            if (username.length() == 4) {
+                hidden += username.substring(0, username.length()-1);
+                hidden += "*";
+            } else {
+
             hidden += username.substring(0, username.length()-3);
             hidden += "*".repeat(3);
+            }
+
         }
         list.set(0, hidden);
 
@@ -43,14 +58,5 @@ public class RegexReplace {
         }
         list.set(1, domains.stream().collect(Collectors.joining(".")));
         return list.stream().collect(Collectors.joining("@"));
-    }
-    public static void main(String[] args) throws IOException {
-        System.out.println(RegexReplace.removeUnits("32cm et 50€"));
-        System.out.println(RegexReplace.removeUnits("32 cm et 50 €"));
-        System.out.println(RegexReplace.removeUnits("32cms et 50€!"));
-
-        System.out.println(RegexReplace.obfuscateEmail("john.doe@example.com"));
-        System.out.println(RegexReplace.obfuscateEmail("jann@example.co.org"));
-        System.out.println(RegexReplace.obfuscateEmail("jackob@example.fr"));
     }
 }

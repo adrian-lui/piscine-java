@@ -14,7 +14,11 @@ public class DifferenceBetweenDate {
         if (localTime1 == null || localTime2 == null) {
             return null;
         }
-        return Duration.between(localTime1, localTime2);
+        if (Duration.between(localTime1, localTime2).isNegative()) {
+            return Duration.between(localTime2, localTime1);
+        } else {
+            return Duration.between(localTime1, localTime2);
+        }
     }
 
     public static Period periodBetweenDate(LocalDate date1, LocalDate date2) {
@@ -22,8 +26,11 @@ public class DifferenceBetweenDate {
         if (date1 == null || date2 == null) {
             return null;
         }
-        return Period.between(date1, date2);
-
+        if (Period.between(date1, date2).isNegative()) {
+            return Period.between(date2, date1);
+        } else {
+            return Period.between(date1, date2);
+        }
     }
 
     public static Long numberOfHoursBetweenDateTime(LocalDateTime dateTime1, LocalDateTime dateTime2) {
@@ -31,13 +38,12 @@ public class DifferenceBetweenDate {
         if (dateTime1 == null || dateTime2 == null) {
             return null;
         }
-        return Duration.between(dateTime1, dateTime2).getSeconds() / 60 / 60;
-    }
-    public static void main(String[] args) {
-        Duration duration = DifferenceBetweenDate.durationBetweenTime(LocalTime.of(12, 54, 32), LocalTime.of(21, 23, 53));
-        System.out.println(duration.toHoursPart() + "H" + duration.toMinutesPart() + "M" + duration.toSecondsPart() + "S");
-        Period period = DifferenceBetweenDate.periodBetweenDate(LocalDate.of(2020, 10, 13), LocalDate.of(2022, 5, 8));
-        System.out.println(period.getYears() + "Y" + period.getMonths() + "M" + period.getDays() + "D");
-        System.out.println(DifferenceBetweenDate.numberOfHoursBetweenDateTime(LocalDateTime.of(2022, 4, 12, 16, 18, 56), LocalDateTime.of(2022, 5, 10, 21, 54, 56)));
+        Duration dur;
+        if (Duration.between(dateTime1, dateTime2).isNegative()) {
+            dur = Duration.between(dateTime2, dateTime1);
+        } else {
+            dur = Duration.between(dateTime1, dateTime2);
+        }
+        return dur.getSeconds() / 60 / 60;
     }
 }
